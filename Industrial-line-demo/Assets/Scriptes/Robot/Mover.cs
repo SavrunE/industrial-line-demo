@@ -6,17 +6,25 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     [SerializeField] private float timeToMove;
-    [SerializeField] private Collider thisCollider;
+    private Collider thisCollider;
 
     private Vector3 thisPosition;
-    private Vector3 endPosition;
+   private Vector3 endPosition;
 
     public Action OnMoving;
 
-    public void MoveTo()
+    private void Start()
     {
+        thisPosition = transform.position;
+        //endPosition = thisPosition + new Vector3(1, 0, 0);
+        thisCollider = GetComponent<Collider>();
+    }
+    public void MoveTo(Vector3 endPosition)
+    {
+        this.endPosition = endPosition;
         StartCoroutine(Move(timeToMove));
     }
+
     public IEnumerator Move(float timeToMove)
     {
         float currTime = 0;
@@ -26,6 +34,5 @@ public class Mover : MonoBehaviour
             currTime += Time.deltaTime;
             yield return null;
         }
-        yield return null;
     }
 }
