@@ -10,7 +10,9 @@ public abstract class Robot : MonoBehaviour
     [SerializeField] protected Container targetContainer;
     [SerializeField] protected CheckPoint checkPoint;
     [SerializeField] protected float minimalDistanceToContainer;
+
     [SerializeField] protected CheckPoints checkPoints;
+    [SerializeField] protected FreeContainers containers;
 
     protected bool canMove = true;
     public Vector3 ContainerUpPosition() => new Vector3(transform.position.x, transform.position.y - minimalDistanceToContainer, transform.position.z);
@@ -21,12 +23,22 @@ public abstract class Robot : MonoBehaviour
         startPosition = transform.position;
     }
 
+    public void ActivateMoverAvtomat()
+    {
+        if (canMove)
+        {
+            targetContainer = containers.TakeRandomContainer();
+            checkPoint = checkPoints.TakeFreePoint();
+            StartCoroutine(Moving());
+        }
+    }
+
     protected void CheckerBlocker()
     {
         int[] indexes = new int[2];
         int i, checkIndex = 0;
         i = 0;
-        foreach (var check in checkPoints.Points())
+        foreach (var check in checkPoints.Points)
         {
             if (targetContainer.CheckPoint() == check || checkPoint == check)
             {
@@ -44,12 +56,6 @@ public abstract class Robot : MonoBehaviour
     protected virtual void Blockerator(int indexOne, int indexTwo)
     {
         throw new System.NotImplementedException();
-    }
-
-    public void ActivateMover()
-    {
-        if (canMove)
-            StartCoroutine(Moving());
     }
 
     protected IEnumerator Moving()

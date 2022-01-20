@@ -23,7 +23,7 @@ public class Container : MonoBehaviour
         return mover.MoveTo(endPosition, timeToMove);
     }
 
-    public void ChangeCheckPoint(CheckPoint checkPoint)
+    public void SetCheckPoint(CheckPoint checkPoint)
     {
         this.checkPoint = checkPoint;
     }

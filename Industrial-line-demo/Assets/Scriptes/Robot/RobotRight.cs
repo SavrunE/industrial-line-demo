@@ -20,7 +20,7 @@ public class RobotRight : Robot
     {
 
         int i = 0;
-        foreach (var check in checkPoints.Points())
+        foreach (var check in checkPoints.Points)
         {
             if (i >= value)
             {
