@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,40 +13,52 @@ public abstract class Robot : MonoBehaviour
     [SerializeField] protected float minimalDistanceToContainer;
 
     [SerializeField] protected CheckPoints checkPoints;
-    [SerializeField] protected FreeContainers containers;
-
     protected bool canMove = true;
     public Vector3 ContainerUpPosition() => new Vector3(transform.position.x, transform.position.y - minimalDistanceToContainer, transform.position.z);
+
+    public Action StopMoving;
+    protected List<CheckPoint> checkPointsBlocked = new List<CheckPoint>();
 
     protected void Start()
     {
         mover = GetComponent<Mover>();
         startPosition = transform.position;
+        StopMoving += UnblockPoints;
     }
 
     public void ActivateMoverAvtomat()
     {
         if (canMove)
         {
-            targetContainer = containers.TakeRandomContainer();
-            checkPoint = checkPoints.TakeFreePoint();
-            StartCoroutine(Moving());
+            checkPoint = checkPoints.TakeFreeCheckPoint();
+            if (checkPoints.TakeOccupiedCheckPoint() != null)
+            {
+                targetContainer = checkPoints.TakeOccupiedCheckPoint().Container;
+            }
+            else
+            {
+                targetContainer = null;
+            }
+
+            if (checkPoint != null && targetContainer != null)
+            {
+                StartCoroutine(Moving());
+            }
         }
     }
 
-    protected void CheckerBlocker()
+    protected void BlockCheckPointes()
     {
         int[] indexes = new int[2];
         int i, checkIndex = 0;
         i = 0;
-        foreach (var check in checkPoints.Points)
+        foreach (var check in checkPoints.CheckPointsList())
         {
             if (targetContainer.CheckPoint() == check || checkPoint == check)
             {
                 indexes[i] = checkIndex;
                 i++;
             }
-
             checkIndex++;
         }
 
@@ -61,7 +74,7 @@ public abstract class Robot : MonoBehaviour
     protected IEnumerator Moving()
     {
         canMove = false;
-        CheckerBlocker();
+        BlockCheckPointes();
         float timeToMove = MoveToContainerX(targetContainer);
         yield return new WaitForSeconds(timeToMove);
         timeToMove = UpContainer();
@@ -69,11 +82,22 @@ public abstract class Robot : MonoBehaviour
         timeToMove = MoveToCheckPointPosition();
         yield return new WaitForSeconds(timeToMove);
         timeToMove = DownContainer();
+        targetContainer.SetCheckPoint(checkPoint);
         yield return new WaitForSeconds(timeToMove);
         timeToMove = MoveToStartPosition();
         yield return new WaitForSeconds(timeToMove);
 
+        StopMoving?.Invoke();
         canMove = true;
+    }
+
+    protected void UnblockPoints()
+    {
+        foreach (var blockCheckPoint in checkPointsBlocked)
+        {
+            blockCheckPoint.UnblockPosition();
+        }
+        checkPointsBlocked = new List<CheckPoint>();
     }
 
     public float MoveToContainerX(Container container)

@@ -18,15 +18,13 @@ public class RobotRight : Robot
 
     private void BlockAfter(int value)
     {
-
-        int i = 0;
-        foreach (var check in checkPoints.Points)
+        int i = checkPoints.CheckPointsList().Count;
+        foreach (var check in checkPoints.CheckPointsList())
         {
-            if (i >= value)
+            if (i-- >= value)
             {
                 check.BlockPosition();
-                i++;
-                Debug.Log(check + "after");
+                checkPointsBlocked.Add(check);
             }
         }
     }

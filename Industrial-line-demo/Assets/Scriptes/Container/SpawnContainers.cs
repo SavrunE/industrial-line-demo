@@ -13,7 +13,7 @@ public class SpawnContainers : MonoBehaviour
 
     private void Start()
     {
-        if (containersCountRed > containersCount || containersCount > checkPoints.Points.Count - 2)
+        if (containersCountRed > containersCount || containersCount > checkPoints.CheckPointsList().Count - 2)
         {
             throw new System.NotImplementedException();
         }
@@ -21,11 +21,10 @@ public class SpawnContainers : MonoBehaviour
         int i = 0;
         while (i++ < containersCount)
         {
-            CheckPoint checkPoint = checkPoints.TakeFreePoint();
+            CheckPoint checkPoint = checkPoints.TakeFreeCheckPoint();
             GameObject containerObject = Instantiate(containerInstance.gameObject, checkPoint.transform);
             Container container = containerObject.GetComponent<Container>();
             container.SetCheckPoint(checkPoint);
-            containers.ContainersList.Add(container);
         }
     }
 }

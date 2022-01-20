@@ -4,25 +4,21 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
-    private bool isOccupied = false;
     private bool isBlocked = false;
-    private Vector3 position;
+    private bool isOccupied = false;
+    private Container container;
 
+    public bool IsBlocked() => isBlocked;
     public bool IsOccupied() => isOccupied;
+    public Container Container => container;
 
-    private void Start()
+    public bool CanInteraction()
     {
-        position = transform.position;
-    }
-
-    public void TakePosition()
-    {
-        isOccupied = true;
-    }
-
-    public void LeavePosition()
-    {
-        isOccupied = false;
+        if (isOccupied && isBlocked)
+        {
+            return true;
+        }
+        return false;
     }
 
     public void BlockPosition()
@@ -33,6 +29,18 @@ public class CheckPoint : MonoBehaviour
     public void UnblockPosition()
     {
         isBlocked = false;
+    }
+
+    public void OccupiedPosition(Container container)
+    {
+        this.container = container;
+        isOccupied = true;
+    }
+
+    public void UnoccupiedPosition()
+    {
+        container = null;
+        isOccupied = false;
     }
 }
 

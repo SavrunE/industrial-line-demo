@@ -14,17 +14,21 @@ public class Container : MonoBehaviour
     {
         mover = GetComponent<Mover>();
     }
+
     public float MoveTo(Vector3 endPosition)
     {
+        checkPoint.UnoccupiedPosition();
         return mover.MoveTo(endPosition);
     }
     public float MoveTo(Vector3 endPosition, float timeToMove)
     {
+        checkPoint.UnoccupiedPosition();
         return mover.MoveTo(endPosition, timeToMove);
     }
 
     public void SetCheckPoint(CheckPoint checkPoint)
     {
         this.checkPoint = checkPoint;
+        checkPoint.OccupiedPosition(this);
     }
 }

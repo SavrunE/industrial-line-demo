@@ -4,39 +4,67 @@ using UnityEngine;
 
 public class CheckPoints : MonoBehaviour
 {
-    [SerializeField] private List<CheckPoint> points;
+    [SerializeField] private List<CheckPoint> checkPoints;
 
-    [HideInInspector]
-    public List<CheckPoint> Points;
+    public List<CheckPoint> NoOccupiedNoBlocked() => CheckNoOccupiedNoBlocked();
+    public List<CheckPoint> OccupiedNoBlocked() => CheckOccupiedNoBlocked();
 
-    [HideInInspector]
-    public List<CheckPoint> FreePoints;
-
-    private void Awake()
+    private List<CheckPoint> CheckNoOccupiedNoBlocked()
     {
-        Points = TakeCheckPoints();
-        FreePoints = TakeCheckPoints();
+        List<CheckPoint> checkPointsList = new List<CheckPoint>();
+        foreach (var point in checkPoints)
+        {
+            if (point.IsBlocked() == false && point.IsOccupied() == false)
+            {
+                checkPointsList.Add(point);
+            }
+        }
+        return checkPointsList;
+    }
+
+    private List<CheckPoint> CheckOccupiedNoBlocked()
+    {
+        List<CheckPoint> checkPointsList = new List<CheckPoint>();
+        foreach (var point in checkPoints)
+        {
+            if (point.IsOccupied() == true && point.IsBlocked() == false)
+            {
+                checkPointsList.Add(point);
+            }
+        }
+        return checkPointsList;
     }
 
     private List<CheckPoint> TakeCheckPoints()
     {
-        List<CheckPoint> pointsInstance = new List<CheckPoint>();
-        foreach (var point in points)
+        List<CheckPoint> list = new List<CheckPoint>();
+        foreach (var point in checkPoints)
         {
-            pointsInstance.Add(point);
+            list.Add(point);
         }
-        return pointsInstance;
+        return list;
     }
 
-    public CheckPoint TakeFreePoint()
+    public List<CheckPoint> CheckPointsList() => TakeCheckPoints();
+
+    public CheckPoint TakeFreeCheckPoint()
     {
-        CheckPoint checkPoint = FreePoints[Random.Range(0, FreePoints.Count - 1)];
-        FreePoints.Remove(checkPoint);
-        return checkPoint;
+        return TakeRandom(NoOccupiedNoBlocked());
     }
 
-    public void GiveFreePoint(CheckPoint checkPoint)
+    public CheckPoint TakeOccupiedCheckPoint()
     {
-        FreePoints.Add(checkPoint);
+        return TakeRandom(OccupiedNoBlocked());
+    }
+
+    private T TakeRandom<T>(List<T> list)
+    {
+        if (list.Count > 1)
+        {
+            T checkPoint = list[Random.Range(0, list.Count - 1)];
+            list.Remove(checkPoint);
+            return checkPoint;
+        }
+        return default;
     }
 }

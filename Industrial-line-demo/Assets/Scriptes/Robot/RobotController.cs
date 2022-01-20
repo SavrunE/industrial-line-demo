@@ -4,15 +4,34 @@ using UnityEngine;
 
 public class RobotController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private RobotLeft robotLeft;
+    [SerializeField] private RobotRight robotRight;
+    [SerializeField] private float delayActivaror = 1f;
+    [SerializeField] private float delaySession = 5f;
+
+    public void ActivateAvtomatMode()
     {
-        
+        StartCoroutine(AvtomatMode());
     }
 
-    // Update is called once per frame
-    void Update()
+    public void StopAvtomatMode()
     {
-        
+        StopCoroutine(AvtomatMode());
+    }
+
+    public void ActivateManualMode()
+    {
+        //TODO manual mode
+        StopAvtomatMode();
+    }
+    private IEnumerator AvtomatMode()
+    {
+        while (true)
+        {
+            robotLeft.ActivateMoverAvtomat();
+            yield return new WaitForSeconds(delayActivaror);
+            robotRight.ActivateMoverAvtomat();
+            yield return new WaitForSeconds(delaySession);
+        }
     }
 }

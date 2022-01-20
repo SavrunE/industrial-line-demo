@@ -4,13 +4,35 @@ using UnityEngine;
 
 public class FreeContainers : MonoBehaviour
 {
-    [HideInInspector]
-    public List<Container> ContainersList;
+    //private List<Container> ContainersList = new List<Container>();
+    //private List<Container> FreeContainersList() => TakeFreeContainers();
 
-    public Container TakeRandomContainer()
-    {
-        Container container= ContainersList[Random.Range(0, ContainersList.Count - 1)];
-        ContainersList.Remove(container);
-        return container;
-    }
+    //public void SetContainer(Container container)
+    //{
+    //    ContainersList.Add(container);
+    //}
+
+    //public Container TakeRandomFreeContainer()
+    //{
+    //    Container container;
+    //    if (FreeContainersList().Count > 0)
+    //    {
+    //        container = ContainersList[Random.Range(0, ContainersList.Count - 1)];
+    //        return container;
+    //    }
+    //    return null;
+    //}
+
+    //private List<Container> TakeFreeContainers()
+    //{
+    //    List<Container> containers = new List<Container>();
+    //    foreach (var container in ContainersList)
+    //    {
+    //        if (container.CheckPoint().CanInteraction())
+    //        {
+    //            containers.Add(container);
+    //        }
+    //    }
+    //    return containers;
+    //}
 }

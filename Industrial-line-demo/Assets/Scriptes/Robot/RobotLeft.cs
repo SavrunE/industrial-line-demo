@@ -20,13 +20,12 @@ public class RobotLeft : Robot
     {
 
         int i = 0;
-        foreach (var check in checkPoints.Points)
+        foreach (var check in checkPoints.CheckPointsList())
         {
-            if (i <= value)
+            if (i++ <= value)
             {
                 check.BlockPosition();
-                i++;
-                Debug.Log(check);
+                checkPointsBlocked.Add(check);
             }
         }
     }
