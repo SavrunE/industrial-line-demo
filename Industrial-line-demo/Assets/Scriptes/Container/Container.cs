@@ -6,6 +6,9 @@ using UnityEngine;
 public class Container : MonoBehaviour
 {
     private Mover mover;
+    [SerializeField] private CheckPoint checkPoint;
+
+    public CheckPoint CheckPoint() => checkPoint;
 
     private void Start()
     {
@@ -18,5 +21,10 @@ public class Container : MonoBehaviour
     public float MoveTo(Vector3 endPosition, float timeToMove)
     {
         return mover.MoveTo(endPosition, timeToMove);
+    }
+
+    public void ChangeCheckPoint(CheckPoint checkPoint)
+    {
+        this.checkPoint = checkPoint;
     }
 }
