@@ -9,10 +9,21 @@ public class Container : MonoBehaviour
     [SerializeField] private CheckPoint checkPoint;
 
     public CheckPoint CheckPoint() => checkPoint;
+    [SerializeField] private ActivateView activateView;
 
     private void Start()
     {
         mover = GetComponent<Mover>();
+    }
+
+    public void Activate()
+    {
+        activateView.Activate();
+    }
+
+    public void Deactivate()
+    {
+        activateView.Deactivate();
     }
 
     public float MoveTo(Vector3 endPosition)

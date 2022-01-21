@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ActivateView))]
 public class CheckPoint : MonoBehaviour
 {
     private bool isBlocked = false;
@@ -11,6 +12,23 @@ public class CheckPoint : MonoBehaviour
     public bool IsBlocked() => isBlocked;
     public bool IsOccupied() => isOccupied;
     public Container Container => container;
+
+    private ActivateView activateView;
+
+    private void Start()
+    {
+        activateView = GetComponent<ActivateView>();    
+    }
+
+    public void Activate()
+    {
+        activateView.Activate();
+    }
+
+    public void Deactivate()
+    {
+        activateView.Deactivate();
+    }
 
     public bool CanInteraction()
     {

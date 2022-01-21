@@ -8,42 +8,32 @@ public abstract class Robot : MonoBehaviour
 {
     protected Vector3 startPosition;
     protected Mover mover;
+
     [SerializeField] protected Container targetContainer;
     [SerializeField] protected CheckPoint checkPoint;
+    [SerializeField] protected CheckPoints checkPoints;
+
     [SerializeField] protected float minimalDistanceToContainer;
 
-    [SerializeField] protected CheckPoints checkPoints;
     protected bool canMove = true;
     public Vector3 ContainerUpPosition() => new Vector3(transform.position.x, transform.position.y - minimalDistanceToContainer, transform.position.z);
 
-    public Action StopMoving;
+    public Action OnStopMoving;
     protected List<CheckPoint> checkPointsBlocked = new List<CheckPoint>();
 
     protected void Start()
     {
         mover = GetComponent<Mover>();
         startPosition = transform.position;
-        StopMoving += UnblockPoints;
+        OnStopMoving += UnblockPoints;
     }
 
-    public void ActivateMoverAvtomat()
+    public void ActivateMover(CheckPoint checkPoint, Container targetContainer)
     {
         if (canMove)
         {
-            checkPoint = checkPoints.TakeFreeCheckPoint();
-            if (checkPoints.TakeOccupiedCheckPoint() != null)
-            {
-                targetContainer = checkPoints.TakeOccupiedCheckPoint().Container;
-            }
-            else
-            {
-                targetContainer = null;
-            }
-
-            if (checkPoint != null && targetContainer != null)
-            {
-                StartCoroutine(Moving());
-            }
+            this.checkPoint = checkPoint; this.targetContainer = targetContainer;
+            StartCoroutine(Moving());
         }
     }
 
@@ -61,8 +51,6 @@ public abstract class Robot : MonoBehaviour
             }
             checkIndex++;
         }
-
-        Debug.Log(indexes[0] + "  " + indexes[1]);
         Blockerator(indexes[0], indexes[1]);
     }
 
@@ -87,7 +75,7 @@ public abstract class Robot : MonoBehaviour
         timeToMove = MoveToStartPosition();
         yield return new WaitForSeconds(timeToMove);
 
-        StopMoving?.Invoke();
+        OnStopMoving?.Invoke();
         canMove = true;
     }
 
