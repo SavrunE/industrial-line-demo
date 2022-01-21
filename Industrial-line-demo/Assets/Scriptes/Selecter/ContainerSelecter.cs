@@ -18,6 +18,7 @@ public class ContainerSelecter : MonoBehaviour
 
     public void FindContainers()
     {
+        containers = new List<Container>();
         foreach (var item in checkPoints.OccupiedNoBlocked())
         {
             containers.Add(item.Container);

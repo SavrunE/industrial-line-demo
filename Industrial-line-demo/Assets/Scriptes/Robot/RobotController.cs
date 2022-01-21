@@ -30,12 +30,10 @@ public class RobotController : MonoBehaviour
 
     public void ActivateManualMode()
     {
-        robotLeft.OnStopMoving += ActivateManualMode;
-        robotRight.OnStopMoving += ActivateManualMode;
+        robotLeft.OnStopMoving += OnStopRobotMove;
+        robotRight.OnStopMoving += OnStopRobotMove;
         DeactivateAvtomatMode();
         activateView.Activate();
-        containerSelecter.ActiveContainer();
-        robotSelecter.SelectLeft();
         //TODO manual mode
     }
 
@@ -46,10 +44,16 @@ public class RobotController : MonoBehaviour
 
     public void DeactivateManualMode()
     {
-        robotLeft.OnStopMoving -= ActivateManualMode;
-        robotRight.OnStopMoving -= ActivateManualMode;
+        robotLeft.OnStopMoving -= OnStopRobotMove;
+        robotRight.OnStopMoving -= OnStopRobotMove;
         activateView.Deactivate();
     }
+
+    private void OnStopRobotMove()
+    {
+        //Recharge queue
+    }
+
 
     private IEnumerator AvtomatMode()
     {

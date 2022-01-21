@@ -9,14 +9,17 @@ public class CheckPointsSelecter : MonoBehaviour
 
     private int currentSelecter;
     private SelectedData selectedData;
+    private RobotSelecter robotSelecter;
 
     private void Start()
     {
         selectedData = GetComponent<SelectedData>();
+        robotSelecter = GetComponent<RobotSelecter>();
     }
 
     public void FindCheckPoint()
     {
+        checkPointsList = new List<CheckPoint>();
         foreach (var item in checkPoints.NoOccupiedNoBlocked())
         {
             checkPointsList.Add(item);
@@ -66,6 +69,7 @@ public class CheckPointsSelecter : MonoBehaviour
     public void SelectThis()
     {
         checkPointsList[currentSelecter].Deactivate();
+        robotSelecter.DeselectAll();
         selectedData.checkPoint = checkPointsList[currentSelecter];
     }
 }
